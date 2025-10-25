@@ -17,8 +17,8 @@
   },
   "keywords": [],
   "license": "Apache-2.0",
-  "author": "Coinbase Inc.",
-  "repository": "https://github.com/coinbase/x402",
+  "author": "0xgasless",
+  "repository": "https://github.com/0xgasless/x402",
   "description": "x402 Payment Protocol",
   "devDependencies": {
     "@eslint/js": "^9.24.0",

@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X402 - Internet-Native Payment Protocol</title>
+    <meta name="description" content="1 line of code to accept digital dollars. No fee, 2 second settlement, $0.001 minimum payment. Open, internet-native payments for humans and AI agents.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Monochrome minimalist palette */
+            --primary: #ffffff;
+            --primary-dark: #e5e7eb;
+            --secondary: #9ca3af;
+            --accent: #ffffff;
+            --dark: #0a0a0a;
+            --darker: #000000;
+            --light: #ffffff;
+            --text-muted: #9ca3af;
+            --surface: rgba(255, 255, 255, 0.03);
+            --surface-2: rgba(255, 255, 255, 0.06);
+            --ring: rgba(255, 255, 255, 0.15);
+            --gradient-1: linear-gradient(90deg, #ffffff 0%, #d1d5db 100%);
+            --gradient-2: linear-gradient(90deg, #111111 0%, #000000 100%);
+            --gradient-3: linear-gradient(135deg, #e5e7eb 0%, #9ca3af 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background:
+                radial-gradient(1000px 700px at 10% -10%, rgba(255, 255, 255, 0.06), transparent 60%),
+                radial-gradient(900px 600px at 90% 5%, rgba(255, 255, 255, 0.04), transparent 55%),
+                var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Ambient glows and subtle dot grid */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+            background:
+                radial-gradient(800px 600px at 50% -15%, rgba(255, 255, 255, 0.08), transparent 65%),
+                radial-gradient(700px 500px at 100% 0%, rgba(255, 255, 255, 0.05), transparent 60%);
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 16px 16px;
+            mask-image: radial-gradient(circle at 50% 30%, black 40%, transparent 70%);
+            opacity: 0.35;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.25rem 5%;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(12px) saturate(140%);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+        }
+
+        nav .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.25s ease, opacity 0.25s ease;
+            opacity: 0.8;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+            opacity: 1;
+        }
+
+        .cta-button {
+            padding: 0.8rem 1.6rem;
+            background: #ffffff;
+            border: 1px solid #ffffff;
+            border-radius: 999px;
+            color: #000000;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease, background 0.25s ease, color 0.25s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            background: #000000;
+            color: #ffffff;
+            box-shadow: 0 12px 36px rgba(255, 255, 255, 0.08);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 0 5%;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(800px 600px at 15% 40%, rgba(255, 255, 255, 0.07), transparent 60%),
+                radial-gradient(900px 700px at 85% 70%, rgba(255, 255, 255, 0.05), transparent 65%);
+            animation: pulse 15s ease-in-out infinite;
+            mask-image: radial-gradient(ellipse at center, black 60%, transparent 100%);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .gradient-text {
+            color: #ffffff;
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            color: #94a3b8;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .secondary-button {
+            padding: 0.8rem 1.6rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 999px;
+            color: #ffffff;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .secondary-button:hover {
+            color: #000000;
+            background: #ffffff;
+            border-color: #ffffff;
+        }
+
+        /* Code Section */
+        .code-section {
+            padding: 5rem 5%;
+            position: relative;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+        }
+
+        .code-block {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow-x: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+        }
+        .code-block::before {
+            content: "";
+            position: absolute;
+            top: 12px;
+            left: 14px;
+            width: 42px;
+            height: 10px;
+            background:
+                radial-gradient(circle at 6px 6px, #fff 4px, transparent 5px),
+                radial-gradient(circle at 22px 6px, #d1d5db 4px, transparent 5px),
+                radial-gradient(circle at 38px 6px, #9ca3af 4px, transparent 5px);
+        }
+
+        .code-block pre {
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .code-block code {
+            color: #a78bfa;
+        }
+
+        /* Features Grid */
+        .features {
+            padding: 5rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.05) 100%);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.28s ease;
+            backdrop-filter: blur(8px) saturate(140%);
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 22px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            box-shadow: none;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--light);
+        }
+
+        .feature-card p {
+            color: #94a3b8;
+            line-height: 1.7;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 5rem 5%;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        /* Use Cases */
+        .use-cases {
+            padding: 5rem 5%;
+            background: linear-gradient(180deg, rgba(99, 102, 241, 0.05) 0%, transparent 100%);
+        }
+
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .use-case-card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.28s ease;
+            backdrop-filter: blur(8px) saturate(140%);
+        }
+
+        .use-case-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 16px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .use-case-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--light);
+        }
+
+        .use-case-card ul {
+            list-style: none;
+            color: #94a3b8;
+        }
+
+        .use-case-card ul li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .use-case-card ul li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        /* Architecture Section */
+        .architecture {
+            padding: 5rem 5%;
+        }
+
+        .architecture-content {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 3rem;
+            margin-top: 3rem;
+            backdrop-filter: blur(8px) saturate(140%);
+        }
+
+        .architecture-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .architecture-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .architecture-item-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .architecture-item-text {
+            flex: 1;
+        }
+
+        .architecture-item-text h4 {
+            margin-bottom: 0.5rem;
+            color: var(--light);
+        }
+
+        .architecture-item-text p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        /* Ecosystem */
+        .ecosystem {
+            padding: 5rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.05) 100%);
+        }
+
+        .ecosystem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .ecosystem-item {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.28s ease;
+            backdrop-filter: blur(8px) saturate(140%);
+        }
+
+        .ecosystem-item:hover {
+            transform: translateY(-6px) scale(1.01);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 16px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .ecosystem-item h4 {
+            color: var(--light);
+            margin-bottom: 0.5rem;
+        }
+
+        .ecosystem-item p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5%;
+            background: rgba(0, 0, 0, 0.8);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: var(--light);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+            color: #64748b;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .features-grid,
+            .use-cases-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">X402</div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#use-cases">Use Cases</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#ecosystem">Ecosystem</a></li>
+                <li><a href="https://github.com/0xgasless/x402" target="_blank">GitHub</a></li>
+            </ul>
+            <a href="https://docs.x402.org" class="cta-button" target="_blank" rel="noopener noreferrer">Documentation</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background"></div>
+        <div class="hero-content fade-in-up">
+            <h1>
+                Internet-Native <span class="gradient-text">Payments</span> for Humans & AI Agents
+            </h1>
+            <p>
+                1 line of code to accept digital dollars. No fee, 2 second settlement, $0.001 minimum payment.
+                Open standard for programmable payments on the internet.
+            </p>
+            <div class="hero-buttons">
+                <a href="https://github.com/0xgasless/x402" class="cta-button" target="_blank" rel="noopener noreferrer">Get Started</a>
+                <a href="https://docs.x402.org" class="secondary-button" target="_blank" rel="noopener noreferrer">Read the Docs</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Section -->
+    <section class="code-section">
+        <div class="section-container">
+            <h2 class="section-title">It's <span class="gradient-text">This Simple</span></h2>
+            <p class="section-subtitle">Add payments to your API in seconds, not weeks</p>
+            
+            <div class="code-block">
+                <pre><code>app.use(
+  // How much you want to charge, and where you want the funds to land
+  paymentMiddleware("0xYourAddress", { "/your-endpoint": "$0.01" })
+);
+// That's it! See examples for complete implementation.</code></pre>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <p style="color: #94a3b8; font-size: 1.1rem;">
+                    Works with Express, FastAPI, Hono, Next.js, and more
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="section-container">
+            <h2 class="section-title">Why <span class="gradient-text">X402</span>?</h2>
+            <p class="section-subtitle">Built for the future of internet commerce</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔓</div>
+                    <h3>Open Standard</h3>
+                    <p>Never rely on a single party. X402 is an open protocol that anyone can implement, ensuring long-term stability and independence.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>HTTP Native</h3>
+                    <p>Seamlessly integrates with existing HTTP infrastructure. No additional requests needed—payment happens in the same flow.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Chain Agnostic</h3>
+                    <p>Support for EVM chains, Solana, Sui, and more. Choose the blockchain that fits your needs without changing your code.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Trust Minimized</h3>
+                    <p>Cryptographic guarantees ensure funds can only move according to client intentions. No middleman risk.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⛽</div>
+                    <h3>Gasless</h3>
+                    <p>Clients and servers don't worry about gas fees. The facilitator handles all blockchain complexity for you.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Easy Integration</h3>
+                    <p>One line for servers, one function for clients. Abstract away crypto complexity while maintaining security.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="section-container">
+            <h2 class="section-title">By the <span class="gradient-text">Numbers</span></h2>
+            
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">$0.001</div>
+                    <div class="stat-label">Minimum Payment</div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-number">~2s</div>
+                    <div class="stat-label">Settlement Time</div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-number">0%</div>
+                    <div class="stat-label">Protocol Fees</div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-number">1 Line</div>
+                    <div class="stat-label">To Integrate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section id="use-cases" class="use-cases">
+        <div class="section-container">
+            <h2 class="section-title">Unlock New <span class="gradient-text">Business Models</span></h2>
+            <p class="section-subtitle">From AI agents to human users—X402 powers next-gen commerce</p>
+            
+            <div class="use-cases-grid">
+                <div class="use-case-card">
+                    <h3>🤖 AI Agent Integration</h3>
+                    <ul>
+                        <li>Automatic payment handling for resource access</li>
+                        <li>Resource discovery through facilitators</li>
+                        <li>Budget management and spending controls</li>
+                        <li>Multi-transport support (HTTP, MCP, A2A)</li>
+                    </ul>
+                </div>
+                
+                <div class="use-case-card">
+                    <h3>💰 Pay-Per-Use APIs</h3>
+                    <ul>
+                        <li>LLM inference endpoints</li>
+                        <li>Data feeds and analytics</li>
+                        <li>Image generation services</li>
+                        <li>Real-time processing APIs</li>
+                    </ul>
+                </div>
+                
+                <div class="use-case-card">
+                    <h3>📰 Content Monetization</h3>
+                    <ul>
+                        <li>Premium articles and research</li>
+                        <li>Video streaming access</li>
+                        <li>Educational content</li>
+                        <li>Exclusive newsletters</li>
+                    </ul>
+                </div>
+                
+                <div class="use-case-card">
+                    <h3>🛠️ SaaS Microtransactions</h3>
+                    <ul>
+                        <li>Usage-based billing</li>
+                        <li>Feature unlocks</li>
+                        <li>API rate limit upgrades</li>
+                        <li>Compute resource provisioning</li>
+                    </ul>
+                </div>
+                
+                <div class="use-case-card">
+                    <h3>🎮 Gaming & Virtual Goods</h3>
+                    <ul>
+                        <li>In-game purchases</li>
+                        <li>NFT minting</li>
+                        <li>Digital collectibles</li>
+                        <li>Virtual world economies</li>
+                    </ul>
+                </div>
+                
+                <div class="use-case-card">
+                    <h3>🔬 Research & Data</h3>
+                    <ul>
+                        <li>Scientific dataset access</li>
+                        <li>Market research reports</li>
+                        <li>Blockchain analytics</li>
+                        <li>Real-time sentiment data</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="architecture" class="architecture">
+        <div class="section-container">
+            <h2 class="section-title">Robust <span class="gradient-text">Architecture</span></h2>
+            <p class="section-subtitle">Built for scale, security, and simplicity</p>
+            
+            <div class="architecture-content">
+                <div class="architecture-list">
+                    <div class="architecture-item">
+                        <div class="architecture-item-icon">✅</div>
+                        <div class="architecture-item-text">
+                            <h4>Zero Configuration</h4>
+                            <p>Drop in middleware and start accepting payments instantly</p>
+                        </div>
+                    </div>
+                    
+                    <div class="architecture-item">
+                        <div class="architecture-item-icon">🔌</div>
+                        <div class="architecture-item-text">
+                            <h4>Framework Support</h4>
+                            <p>Works with Express, Hono, FastAPI, Flask, Next.js, and more</p>
+                        </div>
+                    </div>
+                    
+                    <div class="architecture-item">
+                        <div class="architecture-item-icon">⚙️</div>
+                        <div class="architecture-item-text">
+                            <h4>Minimal Overhead</h4>
+                            <p>Lightweight implementation with negligible performance impact</p>
+                        </div>
+                    </div>
+                    
+                    <div class="architecture-item">
+                        <div class="architecture-item-icon">🛡️</div>
+                        <div class="architecture-item-text">
+                            <h4>Security First</h4>
+                            <p>EIP-3009 signatures, replay protection, and time-bounded auth</p>
+                        </div>
+                    </div>
+                    
+                    <div class="architecture-item">
+                        <div class="architecture-item-icon">🔄</div>
+                        <div class="architecture-item-text">
+                            <h4>Extensible Design</h4>
+                            <p>Support for custom payment schemes and blockchain networks</p>
+                        </div>
+                    </div>
+                    
+                    <div class="architecture-item">
+                        <div class="architecture-item-icon">🌍</div>
+                        <div class="architecture-item-text">
+                            <h4>Cross-Chain Ready</h4>
+                            <p>Base, Avalanche, IoTeX, and expanding multi-chain support</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ecosystem Section -->
+    <section id="ecosystem" class="ecosystem">
+        <div class="section-container">
+            <h2 class="section-title">Growing <span class="gradient-text">Ecosystem</span></h2>
+            <p class="section-subtitle">Packages, tools, and integrations</p>
+            
+            <div class="ecosystem-grid">
+                <div class="ecosystem-item">
+                    <h4>x402</h4>
+                    <p>Core protocol implementation</p>
+                </div>
+                
+                <div class="ecosystem-item">
+                    <h4>x402-express</h4>
+                    <p>Express.js middleware</p>
+                </div>
+                
+                <div class="ecosystem-item">
+                    <h4>x402-hono</h4>
+                    <p>Hono framework support</p>
+                </div>
+                
+                <div class="ecosystem-item">
+                    <h4>x402-next</h4>
+                    <p>Next.js integration</p>
+                </div>
+                
+                <div class="ecosystem-item">
+                    <h4>x402-axios</h4>
+                    <p>Axios interceptor client</p>
+                </div>
+                
+                <div class="ecosystem-item">
+                    <h4>x402-fetch</h4>
+                    <p>Fetch API wrapper</p>
+                </div>
+                
+                <div class="ecosystem-item">
+                    <h4>Bazaar</h4>
+                    <p>Resource discovery marketplace</p>
+                </div>
+                
+                <div class="ecosystem-item">
+                    <h4>Facilitator API</h4>
+                    <p>Payment verification & settlement</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Build the <span class="gradient-text">Future</span>?</h2>
+            <p>Start accepting payments in minutes with X402</p>
+            <div class="hero-buttons">
+                <a href="https://github.com/0xgasless/x402" class="cta-button" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+                <a href="https://docs.x402.org" class="secondary-button" target="_blank" rel="noopener noreferrer">Read Documentation</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>X402</h3>
+                <p style="color: #94a3b8; margin-top: 1rem;">
+                    Open, internet-native payment protocol for the next generation of digital commerce.
+                </p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="https://github.com/0xgasless/x402" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                    <li><a href="https://docs.x402.org" target="_blank" rel="noopener noreferrer">Documentation</a></li>
+                    <li><a href="https://github.com/0xgasless/x402/blob/main/specs/x402-specification.md" target="_blank" rel="noopener noreferrer">Specification</a></li>
+                    <li><a href="https://github.com/0xgasless/x402/blob/main/ROADMAP.md" target="_blank" rel="noopener noreferrer">Roadmap</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Examples</h3>
+                <ul>
+                    <li><a href="https://github.com/0xgasless/x402/tree/main/examples/typescript/servers" target="_blank" rel="noopener noreferrer">Server Examples</a></li>
+                    <li><a href="https://github.com/0xgasless/x402/tree/main/examples/typescript/clients" target="_blank" rel="noopener noreferrer">Client Examples</a></li>
+                    <li><a href="https://github.com/0xgasless/x402/tree/main/examples/typescript/fullstack" target="_blank" rel="noopener noreferrer">Full Stack Apps</a></li>
+                    <li><a href="https://github.com/0xgasless/x402/tree/main/examples/typescript/agent" target="_blank" rel="noopener noreferrer">AI Agent Example</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Community</h3>
+                <ul>
+                    <li><a href="https://github.com/0xgasless/x402/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contributing</a></li>
+                    <li><a href="https://github.com/0xgasless/x402/issues" target="_blank" rel="noopener noreferrer">Issues</a></li>
+                    <li><a href="https://x.com/0xgasless" target="_blank" rel="noopener noreferrer">Twitter/X</a></li>
+                    <li><a href="https://0xgasless.com" target="_blank" rel="noopener noreferrer">0xGasless</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2025 X402 Protocol. Open source under Apache 2.0 License.</p>
+            <p style="margin-top: 0.5rem;">Built with ❤️ by the 0xGasless team</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Add animation to sections
+        document.querySelectorAll('section').forEach((section) => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+            observer.observe(section);
+        });
+
+        // Add nav scroll effect
+        let lastScroll = 0;
+        const nav = document.querySelector('nav');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                nav.style.background = 'rgba(0, 0, 0, 0.9)';
+            } else {
+                nav.style.background = 'rgba(0, 0, 0, 0.55)';
+            }
+            
+            lastScroll = currentScroll;
+        });
+    </script>
+</body>
+</html>
+

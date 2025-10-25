@@ -19,7 +19,7 @@ It's time for an open, internet-native form of payments. A payment rail that doe
 
 - **Open standard:** the x402 protocol will never force reliance on a single party
 - **HTTP Native:** x402 is meant to seamlessly complement the existing HTTP request made by traditional web services, it should not mandate additional requests outside the scope of a typical client / server flow.
-- **Chain and token agnostic:** we welcome contributions that add support for new chains, signing standards, or schemes, so long as they meet our acceptance criteria laid out in [CONTRIBUTING.md](https://github.com/coinbase/x402/blob/main/CONTRIBUTING.md)
+- **Chain and token agnostic:** we welcome contributions that add support for new chains, signing standards, or schemes, so long as they meet our acceptance criteria laid out in [CONTRIBUTING.md](https://github.com/0xgasless/x402/blob/main/CONTRIBUTING.md)
 - **Trust minimizing:** all payment schemes must not allow for the facilitator or resource server to move funds, other than in accordance with client intentions
 - **Easy to use:** x402 needs to be 10x better than existing ways to pay on the internet. This means abstracting as many details of crypto as possible away from the client and resource server, and into the facilitator. This means the client/server should not need to think about gas, rpc, etc.
 
@@ -32,9 +32,9 @@ The x402 ecosystem is growing! Check out our [ecosystem page](https://x402.org/e
 - Ecosystem infrastructure and tooling
 - Learning and community resources
 
-Want to add your project to the ecosystem? See our [demo site README](https://github.com/coinbase/x402/tree/main/typescript/site#adding-your-project-to-the-ecosystem) for detailed instructions on how to submit your project.
+Want to add your project to the ecosystem? See our [demo site README](https://github.com/0xgasless/x402/tree/main/typescript/site#adding-your-project-to-the-ecosystem) for detailed instructions on how to submit your project.
 
-**Roadmap:** see [ROADMAP.md](https://github.com/coinbase/x402/blob/main/ROADMAP.md)
+**Roadmap:** see [ROADMAP.md](https://github.com/0xgasless/x402/blob/main/ROADMAP.md)
 
 ## Terms:
 
