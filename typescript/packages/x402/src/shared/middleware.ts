@@ -9,11 +9,14 @@ import {
   PaymentRequirements,
   PaymentPayload,
   SPLTokenAmount,
+  ERC721TokenAmount,
+  ERC1155TokenAmount,
 } from "../types";
 import { RoutesConfig } from "../types";
 import { safeBase64Decode } from "./base64";
 import { getUsdcChainConfigForChain } from "./evm";
 import { getNetworkId } from "./network";
+import { calculateTotalWithFees } from "./fees";
 
 /**
  * Computes the route patterns for the given routes config
@@ -148,11 +151,26 @@ export function processPriceToAtomicAmount(
   price: Price,
   network: Network,
 ):
-  | { maxAmountRequired: string; asset: ERC20TokenAmount["asset"] | SPLTokenAmount["asset"] }
+  | {
+      maxAmountRequired: string;
+      asset:
+        | ERC20TokenAmount["asset"]
+        | SPLTokenAmount["asset"]
+        | ERC721TokenAmount["asset"]
+        | ERC1155TokenAmount["asset"];
+      tokenType?: "ERC20" | "SPL" | "ERC721" | "ERC1155";
+      tokenId?: string;
+    }
   | { error: string } {
-  // Handle USDC amount (string) or token amount (ERC20TokenAmount)
+  // Handle USDC amount (string) or token amount
   let maxAmountRequired: string;
-  let asset: ERC20TokenAmount["asset"] | SPLTokenAmount["asset"];
+  let asset:
+    | ERC20TokenAmount["asset"]
+    | SPLTokenAmount["asset"]
+    | ERC721TokenAmount["asset"]
+    | ERC1155TokenAmount["asset"];
+  let tokenType: "ERC20" | "SPL" | "ERC721" | "ERC1155" | undefined;
+  let tokenId: string | undefined;
 
   if (typeof price === "string" || typeof price === "number") {
     // USDC amount in dollars
@@ -165,8 +183,28 @@ export function processPriceToAtomicAmount(
     const parsedUsdAmount = parsedAmount.data;
     asset = getDefaultAsset(network);
     maxAmountRequired = (parsedUsdAmount * 10 ** asset.decimals).toString();
+    tokenType = "ERC20";
+  } else if ("tokenId" in price) {
+    // ERC721 or ERC1155
+    if ("amount" in price) {
+      // ERC1155
+      tokenType = "ERC1155";
+      maxAmountRequired = price.amount;
+      tokenId = price.tokenId;
+    } else {
+      // ERC721
+      tokenType = "ERC721";
+      maxAmountRequired = "1"; // NFTs are singular
+      tokenId = price.tokenId;
+    }
+    asset = price.asset;
   } else {
-    // Token amount in atomic units
+    // ERC20 or SPL token amount in atomic units
+    if ("decimals" in price.asset && "eip712" in price.asset) {
+      tokenType = "ERC20";
+    } else {
+      tokenType = "SPL";
+    }
     maxAmountRequired = price.amount;
     asset = price.asset;
   }
@@ -174,6 +212,8 @@ export function processPriceToAtomicAmount(
   return {
     maxAmountRequired,
     asset,
+    tokenType,
+    tokenId,
   };
 }
 

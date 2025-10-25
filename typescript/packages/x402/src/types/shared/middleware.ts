@@ -55,12 +55,45 @@ export interface SPLTokenAmount {
   };
 }
 
-export type Price = Money | ERC20TokenAmount | SPLTokenAmount;
+export interface ERC721TokenAmount {
+  tokenId: string;
+  asset: {
+    address: `0x${string}`;
+    eip712?: {
+      name: string;
+      version: string;
+    };
+  };
+}
+
+export interface ERC1155TokenAmount {
+  tokenId: string;
+  amount: string;
+  asset: {
+    address: `0x${string}`;
+    eip712?: {
+      name: string;
+      version: string;
+    };
+  };
+}
+
+export type FeeType = "flat" | "percentage" | "dynamic";
+
+export interface FeeStructure {
+  type: FeeType;
+  value: string; // For flat: absolute amount, for percentage: basis points (e.g., "250" = 2.5%)
+  recipient?: `0x${string}`; // Optional fee recipient address (defaults to server owner)
+  description?: string;
+}
+
+export type Price = Money | ERC20TokenAmount | SPLTokenAmount | ERC721TokenAmount | ERC1155TokenAmount;
 
 export interface RouteConfig {
   price: Price;
   network: Network;
   config?: PaymentMiddlewareConfig;
+  fees?: FeeStructure[];
 }
 
 export type RoutesConfig = Record<string, Price | RouteConfig>;

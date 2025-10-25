@@ -256,7 +256,11 @@ Clients and facilitators must explicitly support different `(scheme, network)` p
 
 ## Running example
 
-**Requirements:** Node.js v24 or higher
+**Requirements:** Node.js v18 or higher
+
+**Note:** This project supports both **npm** and **pnpm**. Use whichever you prefer! For a detailed comparison and usage guide, see [PACKAGE-MANAGERS.md](./PACKAGE-MANAGERS.md).
+
+### Using pnpm (Recommended for speed)
 
 1. From `examples/typescript` run `pnpm install` and `pnpm build` to ensure all dependent packages and examples are setup.
 
@@ -264,12 +268,27 @@ Clients and facilitators must explicitly support different `(scheme, network)` p
 
 3. Select a client, i.e. axios, and `cd` into that example. Add your private key for the account making payments into the `.env` file, and then run `pnpm dev` in that directory.
 
+### Using npm
+
+1. From the root directory run `npm install` and `npm run build` to ensure all dependent packages and examples are setup.
+
+2. Select a server, i.e. express, and `cd` into that example. Add your server's ethereum address to get paid to into the `.env` file, and then run `npm run dev` in that directory.
+
+3. Select a client, i.e. axios, and `cd` into that example. Add your private key for the account making payments into the `.env` file, and then run `npm run dev` in that directory.
+
 You should see activities in the client terminal, which will display a weather report.
 
 ## Running tests
 
+### Using pnpm
+
 1. Navigate to the typescript directory: `cd typescript`
 2. Install dependencies: `pnpm install`
 3. Run the unit tests: `pnpm test`
+
+### Using npm
+
+1. From the root directory: Install dependencies: `npm install`
+2. Run the unit tests: `npm test --workspaces`
 
 This will run the unit tests for the x402 packages.

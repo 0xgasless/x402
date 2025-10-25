@@ -1,4 +1,16 @@
 {
   "private": true,
-  "packageManager": "pnpm@10.7.0"
+  "workspaces": [
+    "typescript/packages/*",
+    "examples/typescript/servers/*",
+    "examples/typescript/clients/*",
+    "examples/typescript/fullstack/*",
+    "examples/typescript/agent",
+    "examples/typescript/discovery",
+    "examples/typescript/facilitator",
+    "examples/typescript/mcp",
+    "examples/typescript/mcp-embedded-wallet",
+    "examples/typescript/dynamic_agent",
+    "typescript/site"
+  ]
 }
