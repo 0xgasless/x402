@@ -1,10 +1,8 @@
 {
   "name": "x402_monorepo",
   "engines": {
-    "node": ">=18.0.0",
-    "pnpm": ">=10.7.0"
+    "node": ">=18.0.0"
   },
-  "packageManager": "pnpm@10.7.0",
   "private": "true",
   "version": "0.0.2",
   "description": "x402 Payment Protocol Monorepo",
