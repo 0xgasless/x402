@@ -16,8 +16,6 @@ import {
 import { useFacilitator } from 'x402/verify';
 import { exact } from 'x402/schemes';
 import { processPriceToAtomicAmount } from 'x402/shared';
-// uncomment to use the CDP Base mainnet facilitator
-//import { facilitator } from "@coinbase/x402"; 
 
 
 // --- Environment Variable Loading ---
@@ -27,7 +25,7 @@ config(); // Load .env or .env-local
 const JWT_SECRET = process.env.JWT_SECRET as string;
 const DEMO_SERVER_PORT = parseInt(process.env.DEMO_SERVER_PORT || '3000', 10);
 const BUSINESS_WALLET_ADDRESS = process.env.BUSINESS_WALLET_ADDRESS as Hex; // Wallet to receive payments
-const FACILITATOR_URL = 'https://x402.org/facilitator'; // x402 Sepolia Facilitator
+const FACILITATOR_URL = 'https://x402.0xgasless.com/'; // x402 Avalanche Facilitator
 const X402_NETWORK = process.env.X402_NETWORK as X402Network; // Network for x402 payments (e.g., 'base-sepolia', 'base')
 const X402_VERSION = 1; // Standard x402 version
 
@@ -40,8 +38,6 @@ if (!JWT_SECRET || !BUSINESS_WALLET_ADDRESS || !FACILITATOR_URL || !X402_NETWORK
 // --- Hono App & x402 Facilitator Setup ---
 const app = new Hono();
 // Initialize x402 facilitator client for payment verification and settlement
-// for mainnet, use the CDP Base mainnet facilitator as follows:
-// const { verify: verifyX402Payment, settle: settleX402Payment } = useFacilitator(facilitator);
 const { verify: verifyX402Payment, settle: settleX402Payment } = useFacilitator({ url: FACILITATOR_URL });
 
 // --- SIWE Nonce Store (In-Memory for Demo) ---

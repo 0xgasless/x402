@@ -12,7 +12,7 @@ import {
   VerifyResponse,
 } from "../types/verify";
 
-const DEFAULT_FACILITATOR_URL = "https://x402.org/facilitator";
+const DEFAULT_FACILITATOR_URL = "https://x402.0xgasless.com/";
 
 export type CreateHeaders = () => Promise<{
   verify: Record<string, string>;
