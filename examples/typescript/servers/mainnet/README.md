@@ -1,13 +1,12 @@
-# @coinbase/x402 Example Mainnet Server
+# x402 Example Mainnet Server
 
-This example demonstrates how to accept real USDC payments on Base mainnet using Coinbase's [hosted x402 facilitator](https://docs.cdp.coinbase.com/x402/docs/welcome).
+This example demonstrates how to accept real payments on Avalanche mainnet using the 0xGasless x402 facilitator.
 
 ## Prerequisites
 
 - Node.js v20+ (install via [nvm](https://github.com/nvm-sh/nvm))
 - pnpm v10 (install via [pnpm.io/installation](https://pnpm.io/installation))
-- CDP api keys (access via [Coinbase Developer Platform](https://docs.cdp.coinbase.com/))
-- A valid Ethereum address for receiving payments
+- A valid Avalanche address for receiving payments
 
 ## Setup
 

@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 config();
 
 // Configuration from environment variables
-const facilitatorUrl = process.env.FACILITATOR_URL as Resource || "https://x402.org/facilitator";
+const facilitatorUrl = process.env.FACILITATOR_URL as Resource || "https://x402.0xgasless.com/";
 const payTo = process.env.ADDRESS as `0x${string}`;
 const network = (process.env.NETWORK as Network) || "base-sepolia";
 const port = parseInt(process.env.PORT || "3001");

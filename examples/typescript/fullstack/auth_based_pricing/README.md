@@ -96,59 +96,12 @@ You'll need two terminal windows:
 
 This demonstrates the end-to-end flow of wallet authentication, JWT-based sessions, and dynamic, conditional x402 payments.
 
-## Migrating to Base Mainnet with the CDP Facilitator
+## Configuration Notes
 
-To use x402 payments on Base mainnet (instead of Sepolia testnet), follow these steps:
-
-### 1. Environment Variable Changes
-
-- In your `.env` (or environment), set:
-  ```
-  X402_NETWORK=base
-  BUSINESS_WALLET_ADDRESS=<your mainnet address>
-  CLIENT_SIM_PRIVATE_KEY=<mainnet private key with USDC on Base>
-  ```
-- **Remove or ignore** any `FACILITATOR_URL` variable. The CDP facilitator is imported from `@coinbase/x402` in code.
-
-### 2. Code Changes in `backend.ts` (don't forget to run `npm run build`)
-
-- **Facilitator Import:**
-  ```ts
-  import { facilitator } from "@coinbase/x402";
-  const { verify: verifyX402Payment, settle: settleX402Payment } = useFacilitator(facilitator);
-  ```
-- **Network:**
-  Ensure `X402_NETWORK` is set to `'base'` (not `'base-sepolia'`).
-- **Asset:**
-  Make sure your price string (e.g., `$0.01`) maps to a supported asset on Base mainnet (typically USDC). The asset address is handled by the x402 SDK, but your wallet must have the correct token.
-- **Funding:**
-  Both `BUSINESS_WALLET_ADDRESS` and the client wallet must be funded with USDC on Base mainnet.
-
-### 3. Code Changes in `client.ts`
-
-- **Chain ID:**
-  ```ts
-  import { base } from 'viem/chains';
-  const chainId = base.id; // 8453 for Base mainnet
-  ```
-- **Private Key:**
-  The `CLIENT_SIM_PRIVATE_KEY` must be funded on Base mainnet with USDC.
-
-### 4. Troubleshooting 500 Errors
-
-- **Facilitator/Network Mismatch:**
-  - Ensure you are using the mainnet facilitator from `@coinbase/x402` and not a testnet URL.
-  - `X402_NETWORK` must be `'base'`.
-- **Asset Issues:**
-  - If your price string or asset is not supported on Base, payments will fail.
-- **Wallet Funding:**
-  - Both business and client wallets must have USDC on Base mainnet.
-- **Error Logging:**
-  - Check server logs for error details. Add more logging in `backend.ts` if needed.
-- **Client Chain ID:**
-  - Ensure the client uses the correct chain ID (8453 for Base mainnet).
-
-If you encounter persistent 500 errors, check the logs for messages from the facilitator or asset processing functions. Most issues are due to misconfiguration of environment variables, unsupported assets, or lack of wallet funding.
+- Ensure `X402_NETWORK` is set correctly for your target network (e.g., 'avalanche', 'avalanche-fuji')
+- Make sure your price string (e.g., `$0.01`) maps to a supported asset on your chosen network
+- Both `BUSINESS_WALLET_ADDRESS` and the client wallet must be funded with the appropriate tokens on your chosen network
+- The facilitator URL should point to `https://x402.0xgasless.com/` for Avalanche chain support
 
 ## Notes & Further Development
 

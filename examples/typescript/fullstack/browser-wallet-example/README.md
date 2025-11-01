@@ -43,7 +43,7 @@ npm run install:all
 
 Create `server/.env`:
 ```env
-FACILITATOR_URL=https://x402.org/facilitator
+FACILITATOR_URL=https://x402.0xgasless.com/
 NETWORK=base-sepolia
 ADDRESS=0x_YOUR_WALLET_ADDRESS_HERE
 PORT=3001

@@ -37,7 +37,7 @@ export function createAuthHeaders(): CreateHeaders {
 }
 
 export function createFacilitatorConfig(baseUrl?: string): FacilitatorConfig {
-  const url = baseUrl ?? process.env.GASLESS_FACILITATOR_URL ?? "http://localhost:3402";
+  const url = baseUrl ?? process.env.GASLESS_FACILITATOR_URL ?? "https://x402.0xgasless.com/";
   
   return {
     url,

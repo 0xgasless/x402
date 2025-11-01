@@ -35,9 +35,9 @@ x402 is an open protocol for internet-native payments built around the HTTP 402 
 2. Configure your environment variables in `.env`:
 
   ```bash
-  NEXT_PUBLIC_FACILITATOR_URL=your_facilitator_url
+  NEXT_PUBLIC_FACILITATOR_URL=https://x402.0xgasless.com/
   RESOURCE_WALLET_ADDRESS=your_wallet_address
-  NETWORK=sepolia
+  NETWORK=avalanche
   PRIVATE_KEY=your_private_key
   ```
 
